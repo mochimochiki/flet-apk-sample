@@ -27,20 +27,10 @@ RUN python3 -m venv ~/venv \
 ## Build App
 COPY ./app .
 RUN . ~/venv/bin/activate \
-    && flet build apk
+    && flet build --project flet-app --product flet-app apk
 
 # ----------------------------
 # export-stage
 # ----------------------------
 FROM scratch AS export-stage
 COPY --from=build-stage /app/build/apk /
-
-# ----------------------------
-# test-stage
-# ----------------------------
-FROM budtmo/docker-android:emulator_11.0 AS test-stage
-ENV EMULATOR_DEVICE="Samsung Galaxy S10"
-ENV WEB_VNC=true
-COPY --from=build-stage /app/build/apk /home/androidusr/docker-android
-ENTRYPOINT ["/home/androidusr/docker-android/mixins/scripts/run.sh"]
-CMD ["/bin/bash", "-c", "sleep 2m && adb install -r /home/androidusr/docker-android/app-release.apk"]

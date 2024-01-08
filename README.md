@@ -4,14 +4,8 @@ Build Flet apps into Android APKs with Docker.
 
 ## How to use
 
-### Build the Docker Image
+### Building with docker
 
 ```bash
-docker build -t flet-apk:latest .
-```
-
-### Run the Docker Container
-
-```bash
-docker run -t -v $(pwd)/app:/app flet-apk
+docker build --target export-stage -t flet-apk -o apk .
 ```
